@@ -1,35 +1,10 @@
-import dash
-from dash import dcc, html
+import streamlit as st
 import numpy as np
-import plotly.graph_objs as go
+import plotly.express as px
 
-app = dash.Dash(__name__)
+st.title('Mi Primer Panel Streamlit')
 
-app.layout = html.Div([
-    html.H1('Mi Primer Panel Dash'),
-    dcc.Slider(
-        id='my-slider',
-        min=0,
-        max=1000,
-        step=1,
-        value=500,
-    ),
-    dcc.Graph(id='my-graph')
-])
-
-@app.callback(
-    dash.dependencies.Output('my-graph', 'figure'),
-    [dash.dependencies.Input('my-slider', 'value')]
-)
-def update_graph(value):
-    data = np.random.randn(value)
-    fig = go.Figure(data=[go.Histogram(x=data)])
-    return fig
-
-if __name__ == '__main__':
-    app.run_server(debug=True)
-
- 
-
-
-'''http://127.0.0.1:8050/'''
+value = st.slider('Seleccione un valor', min_value=0, max_value=1000, value=500)
+data = np.random.randn(value)
+fig = px.histogram(x=data)
+st.plotly_chart(fig)
