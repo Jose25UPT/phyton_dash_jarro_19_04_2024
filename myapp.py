@@ -6,7 +6,7 @@ import os
 st.title('Mi Primer Panel Streamlit')
 
 # Obtener la lista de archivos en la carpeta
-folder_path = 'excel_2014'  # Ruta de la carpeta que contiene los archivos Excel
+folder_path = 'excel 2014'  # Ruta de la carpeta que contiene los archivos Excel
 excel_files = [file for file in os.listdir(folder_path) if file.endswith('.xlsx')]
 
 # Permitir al usuario seleccionar un archivo Excel
