@@ -3,7 +3,8 @@ import pandas as pd
 import plotly.express as px
 import os
 
-st.title('Panel PRESUPUESTO INSTITUCIONAL  Del año 2014-2015')
+
+st.title('Panel Presupuesto Institucional  Del año 2014-2015')
 
 # Obtener la lista de archivos en las carpetas
 folder_paths = ['excel 2014', 'excel 2015']  # Rutas de las carpetas que contienen los archivos Excel
