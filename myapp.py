@@ -6,7 +6,7 @@ import os
 st.title('Mi Primer Panel Streamlit')
 
 # Obtener la lista de archivos en las carpetas
-folder_paths = ['excel_2014', 'excel_2015']  # Rutas de las carpetas que contienen los archivos Excel
+folder_paths = ['excel 2014', 'excel 2015']  # Rutas de las carpetas que contienen los archivos Excel
 excel_files = []
 
 for folder_path in folder_paths:
