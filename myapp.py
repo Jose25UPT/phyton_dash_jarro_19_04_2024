@@ -10,15 +10,14 @@ folder_paths = ['excel 2014', 'excel 2015']  # Rutas de las carpetas que contien
 excel_files = []
 
 for folder_path in folder_paths:
-    files = [file for file in os.listdir(folder_path) if file.endswith('.xlsx')]
+    files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith('.xlsx')]
     excel_files.extend(files)
 
 # Permitir al usuario seleccionar un archivo Excel
 selected_file = st.selectbox('Selecciona un archivo Excel:', excel_files)
 
 # Cargar los datos desde el archivo seleccionado
-file_path = os.path.join(selected_file)  # Corregido
-df = pd.read_excel(file_path)
+df = pd.read_excel(selected_file)
 
 # Permitir al usuario seleccionar una columna para el histograma
 selected_column = st.selectbox('Selecciona una columna para el histograma:', df.columns)
