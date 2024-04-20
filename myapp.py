@@ -14,41 +14,51 @@ for folder_path in folder_paths:
     excel_files.extend(files)
 
 # Cargar los datos de todos los archivos Excel en un solo DataFrame
-dfs = []
+dfs = {}
 for file in excel_files:
+    year = file.split("/")[-2].split()[-1]
+    if year not in dfs:
+        dfs[year] = []
     df = pd.read_excel(file)
-    dfs.append(df)
+    dfs[year].append(df)
 
-combined_df = pd.concat(dfs, ignore_index=True)
+# Combine the data of each year into a single DataFrame
+combined_dfs = {year: pd.concat(dfs[year], ignore_index=True) for year in dfs}
+
+# Permitir al usuario seleccionar un año
+selected_year = st.selectbox('Selecciona un año:', list(combined_dfs.keys()))
+
+# Obtener las columnas del DataFrame seleccionado
+columns = combined_dfs[selected_year].columns
 
 # Permitir al usuario seleccionar una columna para la visualización
-selected_column = st.selectbox('Selecciona una columna:', combined_df.columns)
+selected_column = st.selectbox('Selecciona una columna:', columns)
 
 # Crear cinco tipos diferentes de gráficos
 
 # Gráfico de barras
 st.subheader('Gráfico de Barras')
-fig_bar = px.bar(combined_df[selected_column].value_counts(), x=combined_df[selected_column].value_counts().index, y=combined_df[selected_column].value_counts().values)
+fig_bar = px.bar(combined_dfs[selected_year][selected_column].value_counts(), x=combined_dfs[selected_year][selected_column].value_counts().index, y=combined_dfs[selected_year][selected_column].value_counts().values)
 st.plotly_chart(fig_bar)
 
 # Gráfico de dispersión
 st.subheader('Gráfico de Dispersión')
-fig_scatter = px.scatter(combined_df, x=selected_column, y=combined_df.columns[0])  # Utiliza la primera columna como eje y
+fig_scatter = px.scatter(combined_dfs[selected_year], x=selected_column, y=combined_dfs[selected_year].columns[0])  # Utiliza la primera columna como eje y
 st.plotly_chart(fig_scatter)
 
 # Gráfico de líneas
 st.subheader('Gráfico de Líneas')
-fig_line = px.line(combined_df, x=combined_df.index, y=selected_column)
+fig_line = px.line(combined_dfs[selected_year], x=combined_dfs[selected_year].index, y=selected_column)
 st.plotly_chart(fig_line)
 
 # Diagrama de caja
 st.subheader('Diagrama de Caja')
-fig_box = px.box(combined_df, y=selected_column)
+fig_box = px.box(combined_dfs[selected_year], y=selected_column)
 st.plotly_chart(fig_box)
 
 # Mapa de calor
 st.subheader('Mapa de Calor')
-numeric_columns = combined_df.select_dtypes(include='number')
+numeric_columns = combined_dfs[selected_year].select_dtypes(include='number')
 if not numeric_columns.empty:
     correlation_matrix = numeric_columns.corr()
     fig_heatmap = px.imshow(correlation_matrix)
