@@ -13,44 +13,45 @@ for folder_path in folder_paths:
     files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith('.xlsx')]
     excel_files.extend(files)
 
-# Permitir al usuario seleccionar un archivo Excel
-selected_file = st.selectbox('Selecciona un archivo Excel:', excel_files)
+# Cargar los datos de todos los archivos Excel en un solo DataFrame
+dfs = []
+for file in excel_files:
+    df = pd.read_excel(file)
+    dfs.append(df)
 
-# Cargar los datos desde el archivo seleccionado
-df = pd.read_excel(selected_file)
+combined_df = pd.concat(dfs, ignore_index=True)
 
 # Permitir al usuario seleccionar una columna para la visualización
-selected_column = st.selectbox('Selecciona una columna:', df.columns)
+selected_column = st.selectbox('Selecciona una columna:', combined_df.columns)
 
 # Crear cinco tipos diferentes de gráficos
 
 # Gráfico de barras
 st.subheader('Gráfico de Barras')
-fig_bar = px.bar(df[selected_column].value_counts(), x=df[selected_column].value_counts().index, y=df[selected_column].value_counts().values)
+fig_bar = px.bar(combined_df[selected_column].value_counts(), x=combined_df[selected_column].value_counts().index, y=combined_df[selected_column].value_counts().values)
 st.plotly_chart(fig_bar)
 
 # Gráfico de dispersión
 st.subheader('Gráfico de Dispersión')
-fig_scatter = px.scatter(df, x=selected_column, y=df.columns[0])  # Utiliza la primera columna como eje y
+fig_scatter = px.scatter(combined_df, x=selected_column, y=combined_df.columns[0])  # Utiliza la primera columna como eje y
 st.plotly_chart(fig_scatter)
 
 # Gráfico de líneas
 st.subheader('Gráfico de Líneas')
-fig_line = px.line(df, x=df.index, y=selected_column)
+fig_line = px.line(combined_df, x=combined_df.index, y=selected_column)
 st.plotly_chart(fig_line)
 
 # Diagrama de caja
 st.subheader('Diagrama de Caja')
-fig_box = px.box(df, y=selected_column)
+fig_box = px.box(combined_df, y=selected_column)
 st.plotly_chart(fig_box)
 
 # Mapa de calor
 st.subheader('Mapa de Calor')
-numeric_columns = df.select_dtypes(include='number')
+numeric_columns = combined_df.select_dtypes(include='number')
 if not numeric_columns.empty:
     correlation_matrix = numeric_columns.corr()
     fig_heatmap = px.imshow(correlation_matrix)
     st.plotly_chart(fig_heatmap)
 else:
     st.write("No se pueden calcular correlaciones ya que no hay columnas numéricas en el DataFrame.")
-
