@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import os
 
-st.title('Panel Presupuesto Institucional  Del año 2014-2015')
+st.title('Panel Presupuesto Institucional Del año 2014-2015')
 
 # Obtener la lista de archivos en las carpetas
 folder_paths = ['excel 2014', 'excel 2015']  # Rutas de las carpetas que contienen los archivos Excel
@@ -26,7 +26,8 @@ for file in excel_files:
 combined_dfs = {year: pd.concat(dfs[year], ignore_index=True) for year in dfs}
 
 # Permitir al usuario seleccionar un año
-selected_year = st.selectbox('Selecciona un año:', list(combined_dfs.keys()))
+st.sidebar.title("Selecciona un año:")
+selected_year = st.sidebar.radio("", list(combined_dfs.keys()))
 
 # Obtener las columnas del DataFrame seleccionado
 columns = combined_dfs[selected_year].columns
