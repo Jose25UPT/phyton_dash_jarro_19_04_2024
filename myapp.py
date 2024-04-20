@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.express as px
 import os
 
-
 st.title('Panel Presupuesto Institucional  Del año 2014-2015')
 
 # Obtener la lista de archivos en las carpetas
@@ -47,5 +46,11 @@ st.plotly_chart(fig_box)
 
 # Mapa de calor
 st.subheader('Mapa de Calor')
-fig_heatmap = px.imshow(df.corr())
-st.plotly_chart(fig_heatmap)
+numeric_columns = df.select_dtypes(include='number')
+if not numeric_columns.empty:
+    correlation_matrix = numeric_columns.corr()
+    fig_heatmap = px.imshow(correlation_matrix)
+    st.plotly_chart(fig_heatmap)
+else:
+    st.write("No se pueden calcular correlaciones ya que no hay columnas numéricas en el DataFrame.")
+
