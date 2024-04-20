@@ -6,8 +6,7 @@ import os
 st.title('Panel PRESUPUESTO INSTITUCIONAL  Del año 2014-2015')
 
 # Obtener la lista de archivos en las carpetas
-folder_paths = 'excel 2014'   # Rutas de las carpetas que contienen los archivos Excel
-folder_paths = 'excel 2015' 
+folder_paths = ['excel 2014', 'excel 2015']  # Rutas de las carpetas que contienen los archivos Excel
 excel_files = []
 
 for folder_path in folder_paths:
@@ -18,7 +17,7 @@ for folder_path in folder_paths:
 selected_file = st.selectbox('Selecciona un archivo Excel:', excel_files)
 
 # Cargar los datos desde el archivo seleccionado
-file_path = os.path.join(folder_path, selected_file)
+file_path = os.path.join(selected_file)  # Corregido
 df = pd.read_excel(file_path)
 
 # Permitir al usuario seleccionar una columna para el histograma
